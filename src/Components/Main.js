@@ -17,8 +17,24 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#4bb543",
-          color: "#fff", // Set black text color
-          fontSize: "16px", // Adjust text size
+          color: "#fff",
+          fontSize: "16px",
+          fontWeight: 600,
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        },
+      },
+    },
+  },
+});
+
+const errorTheme = createTheme({
+  components: {
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#d8604c",
+          color: "#fff",
+          fontSize: "16px",
           fontWeight: 600,
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         },
@@ -35,6 +51,7 @@ export default function Main() {
   const [openDelConfirem, setOpenDelConfirm] = useState(false);
   const [newNoteOpen, setNewNoteOpen] = useState(false);
   const [delNoteOpen, setDelNoteOpen] = useState(false);
+  const [markErrorOpen, setMarkkErrorOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingNote, setEditingNote] = useState({});
 
@@ -68,7 +85,8 @@ export default function Main() {
       if (!response.ok) {
         if (response.status === 501) {
           const errorData = await response.json();
-          console.log(errorData.message);
+          console.log(errorData.message); //
+          setMarkkErrorOpen(true);
           return;
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -105,7 +123,9 @@ export default function Main() {
   const handleDelNoteSnackbarClose = () => {
     setDelNoteOpen(false);
   };
-
+  const handleMarkSnackbarClose = () => {
+    setMarkkErrorOpen(false);
+  };
   const deleteNoteFromBackend = async () => {
     try {
       const response = await fetch(
@@ -216,8 +236,6 @@ export default function Main() {
           onClose={handleNewNoteSnackbarClose}
           message="New note created successfully"
         />
-      </ThemeProvider>
-      <ThemeProvider theme={theme}>
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           key="delete-note"
@@ -225,6 +243,16 @@ export default function Main() {
           autoHideDuration={4000}
           onClose={handleDelNoteSnackbarClose}
           message="Note deleted successfully"
+        />
+      </ThemeProvider>
+      <ThemeProvider theme={errorTheme}>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          key="mark"
+          open={markErrorOpen}
+          autoHideDuration={4000}
+          onClose={handleMarkSnackbarClose}
+          message="Only 3 notes can be pinned!!"
         />
       </ThemeProvider>
     </div>
