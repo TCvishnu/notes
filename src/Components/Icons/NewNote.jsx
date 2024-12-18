@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-export default function Plus(props) {
+export default function NewNote(props) {
   const createNewNote = async () => {
     try {
       const response = await fetch(
@@ -32,7 +32,7 @@ export default function Plus(props) {
       className="fixed bottom-2 left-1/2 -translate-x-1/2"
       onClick={createNewNote}
     >
-      <Icon icon="ic:baseline-add-box" width="50" height="50" />
+      <Icon icon="material-symbols:docs-add-on" width="50" height="50" />
     </button>
   );
 }

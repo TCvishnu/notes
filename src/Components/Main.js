@@ -1,13 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Note from "./Note";
-import Plus from "./Icons/plus";
+import NewNote from "./Icons/NewNote";
 import EditNote from "./EditNote";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 
@@ -109,7 +108,7 @@ export default function Main() {
             })}
         </div>
       )}
-      {!isEditing && <Plus receiveData={handleNewNoteMade} />}
+      {!isEditing && <NewNote receiveData={handleNewNoteMade} />}
 
       {isEditing && (
         <EditNote
