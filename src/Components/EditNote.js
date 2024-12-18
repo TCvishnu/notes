@@ -44,7 +44,7 @@ export default function EditNote(props) {
     <div className="w-full h-full bg-[#fefdf9] flex flex-col gap-8 px-2">
       <div className="flex flex-row w-full gap-1 mt-2 justify-between">
         <button
-          className=" text-[#eeb868] font-semibold text-lg"
+          className=" text-[#d8604c] font-semibold text-lg"
           onClick={handleUpdateEdit}
         >
           Save

@@ -109,12 +109,7 @@ export default function Main() {
             })}
         </div>
       )}
-      {!isEditing && (
-        <Plus
-          styling="fixed bottom-2 left-1/2 -translate-x-1/2 hover:rotate-90 duration-700"
-          receiveData={handleNewNoteMade}
-        />
-      )}
+      {!isEditing && <Plus receiveData={handleNewNoteMade} />}
 
       {isEditing && (
         <EditNote

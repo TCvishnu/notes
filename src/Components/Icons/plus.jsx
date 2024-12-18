@@ -1,4 +1,5 @@
 import React from "react";
+import { Icon } from "@iconify/react";
 
 export default function Plus(props) {
   const createNewNote = async () => {
@@ -27,22 +28,11 @@ export default function Plus(props) {
   };
 
   return (
-    <button className={props.styling} onClick={createNewNote}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="50"
-        height="50"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="#d8604c"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-plus"
-      >
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-      </svg>
+    <button
+      className="fixed bottom-2 left-1/2 -translate-x-1/2"
+      onClick={createNewNote}
+    >
+      <Icon icon="ic:baseline-add-box" width="50" height="50" />
     </button>
   );
 }

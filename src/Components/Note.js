@@ -3,7 +3,8 @@ import "./Styles.css";
 import { Icon } from "@iconify/react";
 
 export default function Note(props) {
-  const sendIDToMain = () => {
+  const sendIDToMain = (event) => {
+    event.stopPropagation();
     props.receiveData([props.id, props.title]);
   };
 
