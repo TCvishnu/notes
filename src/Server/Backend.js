@@ -20,7 +20,7 @@ app.get("/api/notes", async (_, res) => {
     const db = client.db("ProjectsDB");
     const collection = db.collection("Notes");
 
-    data = await collection.find().toArray();
+    data = await collection.find().sort({ isMarked: -1 }).toArray();
     res.json(data);
   } catch (error) {
     console.error("Failed to fetch data:", error);
@@ -36,7 +36,7 @@ app.delete("/api/delNotes/:id", async (req, res) => {
     const collection = db.collection("Notes");
     const id = new ObjectId(req.params.id);
     await collection.deleteOne({ _id: id });
-    data = await collection.find().toArray();
+    data = await collection.find().sort({ isMarked: -1 }).toArray();
     res.json(data);
   } catch (error) {
     console.log("Error: ", error);
@@ -50,7 +50,7 @@ app.post("/api/addNote", async (req, res) => {
     const collection = db.collection("Notes");
     await collection.insertOne({ title: "", body: "" });
 
-    data = await collection.find().toArray();
+    data = await collection.find().sort({ isMarked: -1 }).toArray();
     res.json(data);
   } catch (error) {
     console.log("Error: ", error);
@@ -75,7 +75,40 @@ app.patch("/api/updateNote/:id", async (req, res) => {
     };
 
     await collection.updateOne(filter, updateDoc);
-    res.json(await collection.find().toArray());
+    res.json(await collection.find().sort({ isMarked: -1 }).toArray());
+  } catch (error) {
+    console.error("Error: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.patch("/api/updateMarked/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const db = client.db("ProjectsDB");
+    const collection = db.collection("Notes");
+
+    const markedCount = await collection.countDocuments({
+      isMarked: true,
+    });
+
+    const { isMarked } = req.body;
+
+    if (markedCount === 3 && !isMarked) {
+      res.status(501).json({ message: "Maximum notes marked already" });
+      return;
+    }
+
+    const id = new ObjectId(req.params.id);
+    const filter = { _id: id };
+    const updateDoc = {
+      $set: {
+        isMarked: !isMarked,
+      },
+    };
+
+    await collection.updateOne(filter, updateDoc);
+    res.json(await collection.find().sort({ isMarked: -1 }).toArray());
   } catch (error) {
     console.error("Error: ", error);
     res.status(500).json({ message: "Internal Server Error" });

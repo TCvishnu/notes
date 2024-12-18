@@ -4,30 +4,79 @@ import Note from "./Note";
 import NewNote from "./Icons/NewNote";
 import EditNote from "./EditNote";
 import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { Snackbar } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  components: {
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#4bb543",
+          color: "#fff", // Set black text color
+          fontSize: "16px", // Adjust text size
+          fontWeight: 600,
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        },
+      },
+    },
+  },
+});
 
 export default function Main() {
+  const vertical = "bottom";
+  const horizontal = "center";
   const [notes, setNotes] = useState([]);
-  const [deleteData, setDeleteData] = useState("");
-  const [open, setOpen] = useState(false);
+  const [deleteData, setDeleteData] = useState([]);
+  const [openDelConfirem, setOpenDelConfirm] = useState(false);
+  const [newNoteOpen, setNewNoteOpen] = useState(false);
+  const [delNoteOpen, setDelNoteOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingNote, setEditingNote] = useState({});
 
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-
   const handleDeleteData = (data) => {
     setDeleteData(data);
-    setOpen(true);
+    setOpenDelConfirm(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenDelConfirm(false);
+    setDeleteData([]);
+  };
+
+  const handleBookmarked = async (id, marked) => {
+    try {
+      const sendData = {
+        id,
+        isMarked: marked,
+      };
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + `/api/updateMarked/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(sendData),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 501) {
+          const errorData = await response.json();
+          console.log(errorData.message);
+          return;
+        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setNotes(await response.json());
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleStopEdit = () => {
@@ -46,6 +95,15 @@ export default function Main() {
 
   const handleNewNoteMade = (data) => {
     setNotes(data);
+    setNewNoteOpen(true);
+  };
+
+  const handleNewNoteSnackbarClose = () => {
+    setNewNoteOpen(false);
+  };
+
+  const handleDelNoteSnackbarClose = () => {
+    setDelNoteOpen(false);
   };
 
   const deleteNoteFromBackend = async () => {
@@ -67,6 +125,7 @@ export default function Main() {
       const updatedNotes = await response.json();
       setNotes(updatedNotes);
       handleClose();
+      setDelNoteOpen(true);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -84,15 +143,17 @@ export default function Main() {
     fetchNotes();
   }, []);
   return (
-    <div className="w-screen h-screen flex flex-col items-center gap-8 bg-[#efe6d8]">
+    <div className="w-screen h-screen flex flex-col items-center gap-8 bg-[#efe6d8] ">
       {!isEditing && (
-        <header className="text-2xl font-semibold mt-4 font-kadwa-bold w-5/12 text-center border-b-2 border-b-black">
-          Notes
-        </header>
+        <div className="flex justify-between w-full px-3">
+          <h1 className="text-2xl font-semibold mt-4 font-kadwa-bold border-b-2 border-b-black w-1/12">
+            Notes
+          </h1>
+        </div>
       )}
 
       {!isEditing && (
-        <div className="w-full h-auto grid grid-cols-2 gap-3 px-3 md:grid-cols-3">
+        <div className="w-full h-auto grid grid-cols-2 gap-3 md:grid-cols-3 px-3">
           {notes.length > 0 &&
             notes.map((note, index) => {
               return (
@@ -103,6 +164,8 @@ export default function Main() {
                   key={index}
                   receiveData={handleDeleteData}
                   receiveMaximize={handleMaximize}
+                  bookmarkID={handleBookmarked}
+                  isMarked={note.isMarked}
                 />
               );
             })}
@@ -119,13 +182,15 @@ export default function Main() {
       )}
 
       <Dialog
-        open={open}
-        TransitionComponent={Transition}
+        open={openDelConfirem}
         onClose={handleClose}
-        keepMounted
+        disableEnforceFocus
+        disablePortal
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle className=" text-red-600">{`Delete ${deleteData[1]}`}</DialogTitle>
+        <DialogTitle className=" text-red-600">
+          Delete {deleteData[1] ? deleteData[1] : "this note"}
+        </DialogTitle>
         <DialogContent>
           <p className=" text-gray-600 font-medium leading-relaxed">
             Are you sure you want to delete this note? This action can't be
@@ -141,6 +206,27 @@ export default function Main() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ThemeProvider theme={theme}>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          key="new-note-made"
+          open={newNoteOpen}
+          autoHideDuration={4000}
+          onClose={handleNewNoteSnackbarClose}
+          message="New note created successfully"
+        />
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          key="delete-note"
+          open={delNoteOpen}
+          autoHideDuration={4000}
+          onClose={handleDelNoteSnackbarClose}
+          message="Note deleted successfully"
+        />
+      </ThemeProvider>
     </div>
   );
 }
