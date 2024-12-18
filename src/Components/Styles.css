@@ -1,49 +1,50 @@
-.bg-E84855{
-    background-color: #E84855;
+.bg-E84855 {
+  background-color: #e84855;
 }
 
-.bg-EEB868{
-    background-color: #EEB868;
+.bg-EEB868 {
+  background-color: #eeb868;
 }
 
-.note-shadow{
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+.note-shadow {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
-.confirm-shadow{
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+.confirm-shadow {
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
-.bg-EEF0EB{
-    background-color: #EEF0EB;
+.bg-EEF0EB {
+  background-color: #eef0eb;
 }
 
-.bg-04080F{
-    background-color: #04080F;
+.bg-04080F {
+  background-color: #04080f;
 }
 
-.text-FE4A49{
-    color: #FE4A49;
-}
-
-@font-face {
-    font-family: "Kadwa Bold";
-    src: url("./Fonts/Kadwa-Bold.ttf");
-}
-
-.font-kadwa-bold{
-    font-family: "Kadwa Bold", sans-serif;
+.text-FE4A49 {
+  color: #fe4a49;
 }
 
 @font-face {
-    font-family: "Kadwa Regular";
-    src: url("./Fonts/Kadwa-Regular.ttf");
+  font-family: "Kadwa Bold";
+  src: url("./Fonts/Kadwa-Bold.ttf");
 }
 
-.font-kadwa-regular{
-    font-family: "Kadwa Regular", sans-serif;
+.font-kadwa-bold {
+  font-family: "Kadwa Bold", sans-serif;
 }
 
-.bg-456990{
-    background-color: #456990;
+@font-face {
+  font-family: "Kadwa Regular";
+  src: url("./Fonts/Kadwa-Regular.ttf");
+}
+
+.font-kadwa-regular {
+  font-family: "Kadwa Regular", sans-serif;
+}
+
+.bg-456990 {
+  background-color: #456990;
 }

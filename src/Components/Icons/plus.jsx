@@ -34,7 +34,7 @@ export default function Plus(props) {
         height="50"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="currentColor"
+        stroke="#d8604c"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"

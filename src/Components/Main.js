@@ -3,17 +3,32 @@ import { useState, useEffect } from "react";
 import Note from "./Note";
 import Plus from "./Icons/plus";
 import EditNote from "./EditNote";
+import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 export default function Main() {
   const [notes, setNotes] = useState([]);
   const [deleteData, setDeleteData] = useState("");
-  const [displayConfirmDel, setDisplayConfirmDel] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingNote, setEditingNote] = useState({});
 
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
   const handleDeleteData = (data) => {
     setDeleteData(data);
-    setDisplayConfirmDel(true);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleStopEdit = () => {
@@ -52,6 +67,7 @@ export default function Main() {
 
       const updatedNotes = await response.json();
       setNotes(updatedNotes);
+      handleClose();
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -69,12 +85,15 @@ export default function Main() {
     fetchNotes();
   }, []);
   return (
-    <div className=" w-screen h-screen flex flex-col items-center gap-8">
-      <header className="text-2xl font-semibold mt-4 font-kadwa-bold">
-        Notes
-      </header>
+    <div className="w-screen h-screen flex flex-col items-center gap-8 bg-[#efe6d8]">
       {!isEditing && (
-        <main className="w-full h-4/6 flex flex-row flex-wrap justify-center gap-4 overflow-y-auto">
+        <header className="text-2xl font-semibold mt-4 font-kadwa-bold w-5/12 text-center border-b-2 border-b-black">
+          Notes
+        </header>
+      )}
+
+      {!isEditing && (
+        <div className="w-full h-auto grid grid-cols-2 gap-3 px-3 md:grid-cols-3">
           {notes.length > 0 &&
             notes.map((note, index) => {
               return (
@@ -88,7 +107,7 @@ export default function Main() {
                 />
               );
             })}
-        </main>
+        </div>
       )}
       {!isEditing && (
         <Plus
@@ -104,36 +123,30 @@ export default function Main() {
           updateStop={handleUpdateStop}
         />
       )}
-      {/* confirmation box */}
-      {displayConfirmDel && (
-        <div
-          className="absolute bg-EEF0EB top-1/2 left-1/2 w-1/2 sm:w-3/12 h-32 sm:h-36 rounded-md -translate-x-1/2 -translate-y-1/2 confirm-shadow
-        flex flex-col items-center justify-start gap-2 sm:gap-4"
-        >
-          <div className="w-full h-1/6 ">
-            <button
-              className="w-4 h-4 mt-1 ml-1 absolute bg-E84855 rounded-full"
-              onClick={() => {
-                setDisplayConfirmDel(false);
-              }}
-            ></button>
-          </div>
 
-          <h3 className="w-full text-center font-semibold">
-            Do you want to Delete?{" "}
-            <span className="font-bold text-FE4A49">{deleteData[1]}</span>
-          </h3>
-          <button
-            className="bg-04080F text-white w-16 h-6 rounded-sm font-semibold"
-            onClick={() => {
-              deleteNoteFromBackend();
-              setDisplayConfirmDel(false);
-            }}
-          >
-            Yes
-          </button>
-        </div>
-      )}
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        onClose={handleClose}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle className=" text-red-600">{`Delete ${deleteData[1]}`}</DialogTitle>
+        <DialogContent>
+          <p className=" text-gray-600 font-medium leading-relaxed">
+            Are you sure you want to delete this note? This action can't be
+            undone
+          </p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="info">
+            Cancel
+          </Button>
+          <Button onClick={deleteNoteFromBackend} color="warning">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

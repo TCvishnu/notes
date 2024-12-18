@@ -41,8 +41,8 @@ export default function EditNote(props) {
   };
 
   return (
-    <div className="w-9/12 sm:w-7/12 sm:h-5/6 h-4/6 rounded-xl note-shadow bg-black flex flex-col gap-8">
-      <div className="flex flex-row w-full gap-1 mt-2 ml-2">
+    <div className="w-full h-full bg-[#fefdf9] flex flex-col gap-8 px-2">
+      <div className="flex flex-row w-full gap-1 mt-2">
         <button
           className="w-5 h-5 bg-EEB868 rounded-full"
           onClick={handleUpdateEdit}
@@ -57,16 +57,16 @@ export default function EditNote(props) {
       </div>
 
       <textarea
-        className="bg-transparent w-10/12 ml-2 h-8 outline-none text-white overflow-y-auto font-kadwa-bold"
+        className="bg-transparent w-full h-8 outline-none overflow-y-auto font-kadwa-bold"
         value={title}
         placeholder="Title"
         onChange={(e) => {
           setTitle(e.target.value);
         }}
       ></textarea>
-      <div className="h-1 bg-white w-10/12 ml-2"></div>
+      <div className="h-1 bg-black w-full px-2"></div>
       <textarea
-        className="bg-transparent w-10/12 ml-2 outline-none h-4/6 text-white overflow-y-auto font-kadwa-regular"
+        className="bg-transparent w-full outline-none h-4/6 overflow-y-auto font-kadwa-regular"
         value={body}
         placeholder="Body"
         onChange={(e) => {
