@@ -42,18 +42,19 @@ export default function EditNote(props) {
 
   return (
     <div className="w-full h-full bg-[#fefdf9] flex flex-col gap-8 px-2">
-      <div className="flex flex-row w-full gap-1 mt-2">
+      <div className="flex flex-row w-full gap-1 mt-2 justify-between">
         <button
-          className="w-5 h-5 bg-EEB868 rounded-full"
+          className=" text-[#eeb868] font-semibold text-lg"
           onClick={handleUpdateEdit}
-          title="Make Changes"
-        ></button>
-
+        >
+          Save
+        </button>
         <button
-          className="w-5 h-5 bg-456990 rounded-full"
-          title="Cancel All Edits"
+          className=" text-[#456990] font-semibold text-lg"
           onClick={handleClose}
-        ></button>
+        >
+          Cancel Edits
+        </button>
       </div>
 
       <textarea
