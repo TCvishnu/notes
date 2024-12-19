@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import "../Styles.css";
 
 export default function NewNote(props) {
   const createNewNote = async () => {
@@ -28,10 +29,7 @@ export default function NewNote(props) {
   };
 
   return (
-    <button
-      className="fixed bottom-2 left-1/2 -translate-x-1/2"
-      onClick={createNewNote}
-    >
+    <button className="fixed bottom-0" onClick={createNewNote}>
       <Icon icon="material-symbols:docs-add-on" width="50" height="50" />
     </button>
   );

@@ -204,8 +204,6 @@ export default function Main() {
       <Dialog
         open={openDelConfirem}
         onClose={handleClose}
-        disableEnforceFocus
-        disablePortal
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle className=" text-red-600">
